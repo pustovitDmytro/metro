@@ -2,7 +2,7 @@ const path = require('path');
 const dataDir = path.resolve(__dirname, '../data');
 const fs = require('fs-extra');
 const parser = require('../tools/parser.js');
-// console.log(Object.keys(fs).forEach(i => console.log(i)))
+
 function translateFiles(){
     const csvFiles = fs.readdirSync(dataDir);
     const tmpDir = path.join(__dirname, 'tmp')
@@ -40,11 +40,11 @@ function vectorAdequate(data){
         const zeroIndex = time.findIndex(num => num===0);
         const leftArray = time.splice(0, zeroIndex);
         if(!isSortedReverse(leftArray)) {
-            throw `leftArray ${leftArray.join(' ')}`;
+            throw `${station}: leftArray ${leftArray.join(' ')}`;
         }
         const rightArray = time.splice(1);
         if(!isSorted(rightArray)) {
-            throw `right ${rightArray.join(' ')}`;
+            throw `${station}: rightArray ${rightArray.join(' ')}`;
         }
     });
 }
@@ -52,8 +52,8 @@ function vectorAdequate(data){
 async function test(){
     const files = await translateFiles();
     files.forEach(file => {
+        console.log("file", file);
         const data = require(file);
-        console.log('test')
         diagonallNull(data);
         nonDiagonallNull(data);
         vectorAdequate(data);
